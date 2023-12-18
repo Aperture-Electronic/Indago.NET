@@ -1,4 +1,4 @@
-namespace IndagoSharp.ExceptionFlow;
+namespace Indago.ExceptionFlow;
 
 public abstract class IndagoException : Exception
 {

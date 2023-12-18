@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace IndagoSharp.ServerUtils;
+namespace Indago.ServerUtils;
 
 /// <summary>
 /// Watcher thread that monitors an Indago child Process for premature exits.

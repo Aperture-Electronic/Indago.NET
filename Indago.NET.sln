@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndagoSharp", "IndagoSharp\IndagoSharp.csproj", "{BFB6BBD8-E75A-4ED6-ABA9-6172BBA0276E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Indago.NET", "Indago.NET\Indago.NET.csproj", "{BFB6BBD8-E75A-4ED6-ABA9-6172BBA0276E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

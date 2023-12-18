@@ -1,4 +1,4 @@
-namespace IndagoSharp.DataTypes;
+namespace Indago.DataTypes;
 
 /// <summary>
 /// Indicating whether a Contributor signal is part of the

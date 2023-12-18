@@ -1,4 +1,4 @@
-namespace IndagoSharp.DataTypes;
+namespace Indago.DataTypes;
 
 public static class TimeUnitExtension
 {

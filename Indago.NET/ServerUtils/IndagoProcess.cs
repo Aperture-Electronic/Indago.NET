@@ -1,9 +1,9 @@
 using System.Diagnostics;
 using System.Text;
-using IndagoSharp.DataTypes;
-using IndagoSharp.ExceptionFlow;
+using Indago.DataTypes;
+using Indago.ExceptionFlow;
 
-namespace IndagoSharp.ServerUtils;
+namespace Indago.ServerUtils;
 
 /// <summary>
 /// Start Indago server, either locally/remotely, to communicate with the client.
@@ -90,7 +90,7 @@ public class IndagoProcess
         {
             process?.Kill();
         }
-        catch (InvalidOperationException e)
+        catch (InvalidOperationException)
         {
             return;
         }

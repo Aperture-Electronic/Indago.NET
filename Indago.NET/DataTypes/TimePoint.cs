@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
-using IndagoSharp.ExceptionFlow;
+using Indago.ExceptionFlow;
 
-namespace IndagoSharp.DataTypes;
+namespace Indago.DataTypes;
 
 public partial class TimePoint(float time, TimeUnit units, int? sequenceNumber = null)
 {

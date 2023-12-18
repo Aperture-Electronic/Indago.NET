@@ -1,4 +1,4 @@
-namespace IndagoSharp.ExceptionFlow;
+namespace Indago.ExceptionFlow;
 
 public class IndagoInternalError : IndagoException
 {

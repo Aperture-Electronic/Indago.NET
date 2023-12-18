@@ -1,4 +1,4 @@
-namespace IndagoSharp.DataTypes;
+namespace Indago.DataTypes;
 
 /// <summary>
 /// This class is an argument builder for opening an instance of <see cref="ServerUtils.IndagoProcess"/>.

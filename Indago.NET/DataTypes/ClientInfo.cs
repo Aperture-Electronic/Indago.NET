@@ -1,4 +1,4 @@
-namespace IndagoSharp.DataTypes;
+namespace Indago.DataTypes;
 
 public class ClientInfo (string host, int port, string clientPath, bool embedded)
 {
