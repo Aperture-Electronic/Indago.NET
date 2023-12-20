@@ -1,9 +1,6 @@
 namespace Indago.ExceptionFlow;
 
-public class IndagoInternalError : IndagoException
+public class IndagoInternalError(string? message = "") : IndagoException(message)
 {
-    public IndagoInternalError(string? message = "") : base(message)
-    {
-        
-    }
+    
 }

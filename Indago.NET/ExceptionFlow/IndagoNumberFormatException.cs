@@ -1,9 +1,6 @@
 namespace Indago.ExceptionFlow;
 
-public class IndagoNumberFormatException : IndagoException
+public class IndagoNumberFormatException(string? message = "") : IndagoException(message)
 {
-    public IndagoNumberFormatException(string? message = "") : base(message)
-    {
-        
-    }
+
 }

@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using Indago.DataTypes;
 using Indago.ExceptionFlow;
@@ -78,9 +80,16 @@ public class IndagoProcess
         }
     }
 
-    public int GetOpenPort()
+    public static int GetOpenPort()
     {
-        return 0;
+        Socket socket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        socket.Bind(new IPEndPoint(IPAddress.Any, 0));
+        socket.Listen(1);
+        
+        int port = socket.RemoteEndPoint is IPEndPoint endPoint ? endPoint.Port : -1;
+        socket.Close();
+        
+        return port;
     }
 
     public void Kill()

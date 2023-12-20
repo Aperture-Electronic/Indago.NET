@@ -11,7 +11,13 @@ public class IndagoArgs(string? indagoRoot = null, bool isGui = false,
     public bool IsGui => isGui;
     public string? DbPath => dbPath;
     public bool IsLaunchNeeded => isLaunchNeeded;
-    public int? Port => port;
+
+    public int? Port
+    {
+        get => port;
+        set => port = value;
+    }
+    
     public string Host => host;
     public string? Lwd => lwd;
     public IEnumerable<string>? ExtraArgs => extraArgs;

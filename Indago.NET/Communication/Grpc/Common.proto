@@ -1,0 +1,303 @@
+syntax = "proto3";
+package com.cadence.indago.scripting.common;
+
+enum BusinessLogicEdgeType {  
+  ANY = 0;
+  RISING = 1;
+  FALLING = 2;
+}
+
+enum BusinessLogicInternalType {
+  UNKNOWN_INTERNAL_TYPE = 0;
+  FIELD = 1;
+  EVENT = 2;
+  CONSTRAINT = 3;
+  MODULE = 4;
+  SV_INTERFACE = 5;
+  MODPORT = 6;
+  REFERENCE = 7;
+  PROGRAM = 8;
+  VHDL_COMPONENT = 9;
+  VHDL_BLOCK = 10;
+  BEGIN_BLOCK = 11;
+  CLOCKING_BLOCK = 12;
+  PACKAGE = 13;
+  GENERATE = 14;
+  GENERATE_ITERATION = 15;
+  COMPILATION_UNIT = 16;
+  PRIMITIVE = 17;
+  UDP = 18;
+  SUBROUTINE = 19;
+  VHDL_PROCESS = 20;
+  ALWAYS = 21;
+  INITIAL = 22;
+  FINAL = 23;
+  METHOD = 24;
+  PORT = 25;
+  CLASS = 26;
+  VARIABLE = 27;
+  NET = 28;
+  ENUM = 29;
+  SIGNAL = 30;
+  PARAMETER = 31;
+  GENERIC = 32;
+  REAL = 33;
+  ASSERTION = 34;
+  PROPERTY = 35;
+  ASSERTSEQ = 36;
+  TRANSACTION = 37;
+  INTERFACE_REF = 38;
+  STATIC_ARRAY = 39;
+  PACKED_ARRAY = 40;
+  DYNAMIC_ARRAY = 41;
+  ASSOCIATIVE_ARRAY = 42;
+  QUEUE = 43;
+  PACKED_STRUCT = 44;
+  PACKED_UNION = 45;
+  UNPACKED_STRUCT = 46;
+  STRING = 47;
+  VHDL_ENUM = 48;
+  SUPPLY_NET = 49;
+  EXPRESSION = 50;
+  LITERAL = 51;
+}
+
+enum Direction {
+  NODIR = 0;
+  INPUT = 1;
+  OUTPUT = 2;
+  INOUT = 3;
+  MIXEDIO = 4;
+  BUFFER = 5;
+  LINKAGE = 6;
+  GUARD = 7;
+  INTERFACE = 8;
+  EXPORT = 9;
+  INITIATOR = 10;
+  TARGET = 11;
+}
+
+enum BusinessLogicMessageType {
+  LOG = 0;
+  WARNING = 1;
+  ERROR = 2;
+  SMARTPRINT = 3;
+}
+
+enum BusinessLogicMessageVerbosity
+{ 
+  VERBOSITY_NONE = 0;
+  VERBOSITY_LOW = 1;
+  VERBOSITY_MEDIUM = 2;
+  VERBOSITY_HIGH = 3;
+  VERBOSITY_FULL = 4;
+  VERBOSITY_DEBUG = 5;
+  VERBOSITY_OTHER = 6;
+}
+
+enum BusinessLogicContributorType {
+  UNKNOWN_CONTRIB_TYPE = 0;
+  VALUE = 1;
+  CONTROL = 2;
+  IMPLICIT = 3;
+}
+
+enum BusinessLogicTimeUnits {
+  UNITS_NONE = 0;
+  S = 1;
+  MS = 2;
+  US = 3;
+  NS = 4;
+  PS = 5;
+  FS = 6;
+  ZS = 7;
+}
+
+enum BusinessLogicRadixValue {
+  DEFAULT = 0;
+  ASCII = 1;
+  BINARY = 2;
+  OCTAL = 3;
+  DECIMAL = 4;
+  HEXADECIMAL = 5;
+  HEX_OCTET = 6;
+  BINARY_OCTET = 7;
+  UNKNOWN = 8;
+  AS_RECORDED = 9;
+  DECIMAL_ONES_COMPLEMENT = 10;
+  DECIMAL_TWOS_COMPLEMENT = 11;
+}
+
+enum BusinessLogicDatabaseType {
+  DB_NONE = 0;
+  DB_WAV  = 1;
+  DB_IDA  = 2;
+  DB_USER = 3;
+}
+
+enum BusinessLogicExpressionType {
+  EXPR_NONE = 0;
+  EXPR_SIMPLE = 1;
+  EXPR_ASSERTION = 2;
+  EXPR_SAMPLE_BASED_ASSERTION = 3;
+  EXPR_EDGE_COUNTER = 4;
+  EXPR_RISING_EDGE_COUNTER = 5;
+  EXPR_FALLING_EDGE_COUNTER = 6;
+}
+
+enum BusinessLogicOperand {
+  OP_DEFAULT = 0;
+  EQUALS = 1;
+  GREATER_THAN = 2;
+  GREATER_THAN_EQUALS = 3;
+  LESS_THAN = 4;
+  LESS_THAN_EQUALS = 5;
+  NOT_EQUALS = 6;
+  CONTAINS = 7;
+  MATCHES = 8;
+}
+
+message BusinessLogicTimePoint {
+  optional uint64 time  = 1;
+  optional uint64 seq   = 2;
+  optional int32  units = 3;
+  optional int32  actual_exp = 4;
+}
+
+message BusinessLogicRadix {
+  optional BusinessLogicRadixValue radixValue = 1;
+}
+
+message BusinessLogicTimeValue {
+  optional BusinessLogicTimePoint time = 1;
+  optional BusinessLogicString value = 2;
+}
+
+message BusinessLogicTimeValueList {
+  repeated BusinessLogicTimeValue value = 1;
+}
+
+message BusinessLogicDatabase {
+  optional uint32 handle = 1;
+  optional string name = 2;
+  optional string path = 3;
+  optional BusinessLogicDatabaseType type = 4;
+  optional BusinessLogicTimePoint start = 5;
+  optional BusinessLogicTimePoint end = 6;
+} 
+
+message SessionInfo {
+  optional string version = 1;
+  repeated BusinessLogicDatabase values_databases = 2;
+  repeated BusinessLogicDatabase design_databases = 3;
+  optional bool interactive = 4;
+  optional bool lwd = 5;
+  optional bool lp = 6;
+  optional bool esw = 7;
+  optional bool uvm = 8;
+  optional uint32 rpcCount = 9;
+  optional bool guiMode = 10;
+  optional bool guiReady = 11;
+  optional uint64 memory = 12;
+  optional uint64 allocated_memory = 13;
+  optional uint64 max_memory = 14;
+}
+
+message BusinessLogicInteger {
+  optional uint32 value = 1;
+}
+
+message BusinessLogicLong {
+  optional uint64 value = 1;
+}
+
+message BusinessLogicBool {
+  optional bool value = 1;
+}
+
+message BusinessLogicString {
+  optional string value = 1;
+}
+
+message BusinessLogicValueHeader {
+  optional uint32 client = 1;
+  optional string name   = 2;
+  optional string scope  = 3;
+  optional uint32 database_handle = 4;
+  optional uint32 width = 5;
+}
+
+message BusinessLogicValueData {
+  optional BusinessLogicValueHeader header = 1;
+  optional BusinessLogicTimeValue signal = 2;
+}
+
+message GUIColor {
+  optional uint32 r = 1;
+  optional uint32 g = 2;
+  optional uint32 b = 3;
+  optional uint32 a = 4;
+  optional string name = 5;
+}
+
+message GUIComponent
+{
+  optional uint32 handle = 1;
+  optional uint32 client = 2;
+  optional string type   = 3;
+}
+
+message GUIServerObject {
+  optional uint32 handle = 1;
+  optional uint32 client = 2;
+  optional string name   = 3;
+  optional string type   = 4;
+}
+
+message NoParameters {
+  
+}
+
+message BusinessLogicQueryValue {
+  oneof value {
+    string str = 1;
+    uint64 int = 2;
+    bool   boolean = 3;
+    BusinessLogicTimePoint tp = 4;
+    BusinessLogicEdgeType edge = 5;
+    BusinessLogicDatabaseType db = 6;
+    BusinessLogicInternalType internal = 7;
+    Direction direction = 8;
+    BusinessLogicMessageType messageType = 9;
+    BusinessLogicMessageVerbosity messageVerbosity = 10;
+    BusinessLogicContributorType contributorType = 11;
+    BusinessLogicTimeValueList tvals = 12;
+    BusinessLogicExpressionType exprType = 13;
+  }
+}
+
+message BusinessLogicResponseOptions {
+  optional bool withValue = 1;
+  optional bool withTransitions = 2;
+  optional BusinessLogicTimeUnits units = 3;
+  optional BusinessLogicRadix radix = 4;
+  optional bool withCells = 5;
+  optional string withDatabase = 6;
+  optional bool withDeclaration = 7;
+}
+
+message BusinessLogicSourceFile {
+  optional string file_name      = 1;
+  optional uint64 line_count     = 2;
+  optional uint64 size           = 3;
+  optional bool   is_open        = 4;
+  optional bool   is_active_file = 5;
+  optional uint32 current_line   = 6;
+  optional uint32 first_visible_line = 7;
+  optional string selected_text  = 8;
+  optional string scope          = 9;
+  optional uint32 server_file    = 10;
+}
+
+
+

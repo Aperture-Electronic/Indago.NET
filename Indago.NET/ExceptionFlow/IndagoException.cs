@@ -1,9 +1,6 @@
 namespace Indago.ExceptionFlow;
 
-public abstract class IndagoException : Exception
+public abstract class IndagoException(string? message = "") : Exception(message)
 {
-    protected IndagoException(string? message = "") : base(message)
-    {
-        
-    }
+
 }

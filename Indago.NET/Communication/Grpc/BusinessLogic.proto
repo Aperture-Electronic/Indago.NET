@@ -1,0 +1,242 @@
+syntax = "proto3";
+
+package com.cadence.indago.scripting.businesslogic;
+import "Common.proto";
+
+enum Language {
+  VHDL = 0;
+  VERILOG = 1;
+  UNSUPPORTED = 2;
+}
+
+enum BusinessPrimitiveType {
+  UNKNOWN = 0;
+  AND = 1;
+  NAND = 2;
+  OR = 3;
+  NOR = 4;
+  XOR = 5;
+  XNOR = 6;
+  BUF = 7;
+  NOT = 8;
+  BUFIF0 = 9;
+  BUFIF1 = 10;
+  NOTIF0 = 11;
+  NOTIF1 = 12;
+  NMOS = 13;
+  PMOS = 14;
+  CMOS = 15;
+  RNMOS = 16;
+  RPMOS = 17;
+  RCMOS = 18;
+  RTRAN = 19;
+  RTRANIF0 = 20;
+  RTRANIF1 = 21;
+  TRAN = 22;
+  TRANIF0 = 23;
+  TRANIF1 = 24;
+  PULLUP = 25;
+  PULLDOWN = 26;
+  SEQUDP = 27;
+  COMBUDP = 28;
+  CONTASSIGN = 29;
+  UNDEFINED = 30;
+}
+
+enum BusinessPrimitiveCriteriaType {
+  NONE = 0;
+  DEPTH = 1;
+  NAME = 2;
+  SIZE = 3;
+  START_TIME = 4;
+  END_TIME = 5;
+  EDGE_TYPE = 6;
+  VALUES_DATABASE = 7;
+  TYPE = 8;
+  PATH = 9;
+  COUNT = 10;
+  FILE = 11;
+  LINE = 12;
+  MODULE_NAME = 13;
+  COMPILATION_LIBRARY = 14;
+  FULL_PATH = 15;
+  IS_POWER_AWARE = 16;
+  IS_LIBERTY = 17;
+  HAS_PG_PINS = 18;
+  IS_LIBERTY_INSIDE_LIBERTY = 19;
+  TEXT = 20;
+  DIRECTION = 21;
+  IS_PORT = 22;
+  MESSAGE = 23;
+  DECLARATION_FILE = 24;
+  DECLARATION_LINE = 25;
+  DECLARATION_TYPE = 26;
+  DECLARATION_NAME = 27;
+  VERBOSITY = 28;
+  CONTRIBUTOR_TYPE = 29;
+  TAG = 30;
+  IS_UDP = 31;
+  IS_PRIMITIVE = 32;
+  IS_CELL = 33;
+  VALUE_STRING = 34;
+  IS_VIP = 35;
+  IS_ACTIVE = 36;
+}
+
+enum BusinessPrimitivePortType {
+  REGULAR = 0;
+  PGPIN = 1;
+}
+
+enum BusinessPrimitivePgPinType {
+  PRIMARY_POWER_PIN = 0;
+  PRIMARY_GROUND_PIN = 1;
+  DEEPPWELL_PIN = 2;
+  PWELL_PIN = 3;
+  INTERNAL_GROUND_PIN = 4;
+  BACKUP_GROUND_PIN = 5;
+  BACKUP_POWER_PIN = 6;
+  INTERNAL_POWER_PIN = 7;
+  NWELL_PIN = 8;
+  DEEPNWELL_PIN = 9;
+  PG_NONE = 10;
+}
+
+message BusinessLogicDriver {
+  optional uint32 handle = 1;
+  optional string name   = 2;
+  optional com.cadence.indago.scripting.common.BusinessLogicTimePoint time = 3;
+  optional bool active = 4;
+  optional bool xprop = 5;
+  optional bool noConnection = 6;
+  optional BusinessLogicSourceLocation source = 7;
+  optional string expression = 8;
+  optional BusinessLogicInternalList driven_signals = 9;
+}
+
+message BusinessLogicLoad {
+  optional uint32 handle = 1;
+  optional string name   = 2;
+  optional BusinessLogicSourceLocation source = 3;
+  optional BusinessLogicInternalList contexts = 4;
+  optional BusinessLogicInternalList driven_signals = 5;
+}
+
+message BusinessLogicPort {
+  optional uint32 handles = 1;
+  optional string name    = 2;
+  optional string path    = 3;
+  optional com.cadence.indago.scripting.common.Direction direction = 4;
+  optional BusinessLogicOptionalInternal loconn = 5;
+  optioanl BusinessLogicInternalList     hiconn = 6;
+  optional uint32 size    = 7;
+  optional BusinessLogicPortType type = 8;
+  optional BusinessLogicPgPinType pgPinType = 9;
+}
+
+message BusinessLogicDeclaration {
+  optional uint32 handle = 1;
+  optional string name   = 2;
+  optional com.cadence.indago.scripting.common.BusinessLogicInternalType type = 3;
+  optional BusinessLogicSourceLocation source = 4;
+  optional string compilation_library = 5;
+  optional Language language = 6;
+  optional bool is_cell = 7;
+  optional bool is_primitive = 8;
+  optional bool is_udp = 9;
+}
+
+message BusinessLogicScope {
+  optional uint32 handle = 1;
+  optional string name   = 2;
+  optional string path   = 3;
+  optional com.cadence.indago.scripting.common.BusinessLogicInternalType type = 4;
+  optional bool   no_declaration = 6;
+  optional BusinessLogicDeclaration fetched_declaration = 7;
+}
+
+message BusinessLogicOptionalScope {
+  oneof scope {
+    bool no_scope = 1;
+    BusinessLogicScope value = 2;
+  }
+}
+
+message BusinessLogicPowerDomain {
+  optional uint32 handle = 1;
+  optional string name   = 2;
+  optional string path   = 3;
+  optional BusinessLogicSourceLocation source = 4;
+  optional bool is_null = 5;
+}
+
+message BusinessLogicIsolationStrategy {
+  optional uint32 handle = 1;
+  optional string name   = 2;
+  optional string path   = 3;
+  optional BusinessLogicSourceLocation source = 4;
+  optional BusinessLogicSupplySet supply_set = 5;
+  optional BusinessLogicPowerDomain power_domain = 6;
+  optional BusinessLogicInternal control_signal = 7;
+  optional string clamp_value = 8;
+}
+
+message BusinessLogicRetentionStrategy {
+  optional uint32 handle = 1;
+  optional string name   = 2;
+  optional string path   = 3;
+  optional BusinessLogicSourceLocation source = 4;
+  optional BusinessLogicPowerDomain power_domain = 5;
+}
+
+message BusinessLogicSupplySet {
+  optional uint32 handle = 1;
+  optional string name   = 2;
+  optional string path   = 3;
+  optional BusinessLogicSourceLocation source = 4;
+}
+
+message BusinessLogicSupplySetAndRole {
+  optional uint32 handle = 1;
+  optional string role   = 2;
+  optional BusinessLogicSupplySet set = 3;
+}
+
+message BusinessLogicSupplyNetAndRole {
+  optional uint32 handle = 1;
+  optional string role   = 2;
+  optional BusinessLogicInternal net = 3;
+}
+
+message BusinessLogicInternal {
+  optional uint32 handle = 1;
+  optional string name   = 2;
+  optional string path   = 3;
+  optional com.cadence.indago.scripting.common.BusinessLogicInternalType type = 4;
+  optional uint32 size   = 5;
+  oneof value {
+    bool no_value = 8;
+    string fetched_value = 9;
+  }
+  oneof transitions {
+    bool no_transitions = 10;
+    uint32 fetched_transitions = 11;
+  }
+  optional Language language = 12;
+  oneof declaration {
+    bool no_declaration = 13;
+    BusinessLogicDeclaration fetched_declaration = 14;
+  }
+}
+
+message BusinessLogicOptionalInternal {
+  oneof internal {
+    bool no_internal = 1;
+    BusinessLogicInternal value = 2;
+  }
+}
+
+
+
+
+
