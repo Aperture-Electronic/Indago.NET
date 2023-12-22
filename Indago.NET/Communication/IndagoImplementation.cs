@@ -86,29 +86,23 @@ public class IndagoImplementation
     {
         List<BusinessLogicInternal> internals = [];
         
-        try
+        var stream = BusinessLogicClient.get_internals(query);
+        while (await stream.ResponseStream.MoveNext())
         {
-            var stream = BusinessLogicClient.get_internals(query);
-            while (await stream.ResponseStream.MoveNext())
-            {
-                internals.AddRange(stream.ResponseStream.Current.Value);
-            }
-
-            return internals;
+            internals.AddRange(stream.ResponseStream.Current.Value);
         }
-        catch (RpcException e)
-        {
-            if (e.Message.Contains("Failed to deserialize response message"))
-            {
-                // No any response, may be the list is empty
-                return internals;
-            }
-            else if (e.Message.Contains("Unexpected data after finished"))
-            {
-                throw new IndagoInternalError("The queried list is too large, please refine your query.");
-            }
 
-            throw;
-        }
+        return internals;
+    }
+
+    public async Task<BusinessLogicTimePoint> GetCurrentTime()
+    {
+        var currentTime = await BusinessLogicClient.get_current_timeAsync(new NoParameters());
+        return currentTime!;
+    }
+
+    public async Task SetCurrentTime(BusinessLogicTimePoint timePoint)
+    {
+        await BusinessLogicClient.set_current_timeAsync(timePoint);
     }
 }

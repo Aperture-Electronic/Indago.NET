@@ -17,4 +17,17 @@ public static class TimeUnitExtension
             "zs" => TimeUnit.Zeptoseconds,
             _ => throw new ArgumentOutOfRangeException(nameof(str))
         };
+    
+    public static string ToAbbreviation(this TimeUnit unit)
+        => unit switch
+        {
+            TimeUnit.Seconds => "s",
+            TimeUnit.Milliseconds => "ms",
+            TimeUnit.Microseconds => "us",
+            TimeUnit.Nanoseconds => "ns",
+            TimeUnit.Picoseconds => "ps",
+            TimeUnit.Femtoseconds => "fs",
+            TimeUnit.Zeptoseconds => "zs",
+            _ => throw new ArgumentOutOfRangeException(nameof(unit))
+        };
 }

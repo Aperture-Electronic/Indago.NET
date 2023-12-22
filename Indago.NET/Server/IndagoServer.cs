@@ -87,17 +87,16 @@ public class IndagoServer
         {
             Connection = new(Arguments, ClientPerferences.ServerTimeout);
         }
-
-        if (Connection is null) return;
-        if (Connection.Alive)
+        
+        if (Connection?.Alive == true)
         {
             Implementation = new(Arguments, Connection);
         }
         else
         {
-            return;
+            throw new IndagoInternalError("Cannot connect to Indago server.");
         }
-
+        
         SignalContext = new(Implementation);
     }
 
@@ -117,5 +116,12 @@ public class IndagoServer
         SignalContext.WithDeclaration = withDeclaration;
 
         return SignalContext;
+    }
+
+    public TimePoint CurrentTime
+    {
+        get => Implementation?.GetCurrentTime().Result ?? 
+               throw new IndagoInternalError("Cannot get current time from Indago server.");
+        set => Implementation?.SetCurrentTime(value);
     }
 }
