@@ -1,0 +1,209 @@
+syntax = "proto3";
+
+package com.cadence.indago.scripting.generated.gui;
+import "Common.proto";
+import "BusinessLogic.proto";
+
+enum ZoomDirection {
+  NO_DIR = 0;
+  IN     = 1;
+  OUT    = 2;
+  FULL   = 3;
+}
+
+enum ExploreType {
+  NO_TYPE = 0;
+  DRIVERS = 1;
+  LOADS   = 2;
+  CONNECTIVITY = 3;
+}
+
+enum TraceTypeValue {
+  DEFAULT = 0;
+  DIGITAL = 1;
+  ANALOG_LINEAR = 2;
+  ANALOG_SAMPLE_AND_HOLD = 3;
+}
+
+enum GUICriteriaType {
+  PROPERTY_NAME = 0;
+  NAME = 2;
+  IS_SELECTED = 3;
+  IS_PINNED = 4;
+  FULL_PATH = 5;
+  PATH = 6;
+  DB = 7;
+  INDEX = 8;
+  LEVEL = 9;
+  IS_EXPANDED = 10;
+  VALUE = 11;
+  IS_GROUP = 12;
+  CHILD_COUNT = 13;
+  RADIX = 14;
+  PARENT = 15;
+  ENTITY = 16;
+  TYPE = 17;
+}
+
+enum ERows {
+  NONE = 0;
+  ALL  = 1;
+}
+
+enum EventType {
+  NO_EVENT = 0;
+  CDL_CHANGE = 1;
+  KEY_DOWN = 2;
+  MOUSE_DOWN = 3;
+  DB_RELOAD = 4;
+  SELECT = 5;
+  DESELECT = 6;
+  NOTIFICATION = 7;
+  GUI_BUTTON = 8;
+  MARKER = 9;
+  WAVEFORM_ADD = 10;
+  TRACE_CAUSE = 11;
+  EXPLORE = 12;
+  WF_TIME_VIEW_CHANGED = 13;
+  SOURCE_ACTIVE_FILE_CHANGED = 14;
+  SCOPE_CHANGED = 15;
+  HIERARCHY_SELECTED_PATH_CHANGED = 16;
+  SOURCE_ROW_SELECTED_CHANGED = 17;
+}
+
+message GUIAction {
+  optional uint32 client = 1;
+  optional string title  = 2;
+  optional GUIServerObject source = 3;
+  repeated GUIArgument args = 4;
+  optional string details = 5;
+}
+
+message TraceType {
+  optional TraceTypeValue traceTypeValue = 1;
+}
+
+message GUIBasicType {
+  optional uint32 handle = 1;
+  oneof value {
+    BusinessLogicInteger int = 2;
+    string str = 3;
+    bool boolean = 4;
+    BusinessLogicTimePoint tp = 5;
+    ZoomDirection direction = 6;
+    BusinessLogicTimeValue tv = 7;
+    GUIColor color = 8;
+    TraceType traceType = 9;
+    Rows row = 10;
+    BusinessLogicSourceLocation sourceLocation = 11;
+    ExploreType exploreType = 12;
+    BusinessLogicSourceFile sourceFile = 13;
+    BusinessLogicLong long = 14;
+  }
+}
+
+message GUIBasicTypeList {
+  repeated GUIBasicType value = 1;
+}
+
+message GUIComposedType {
+  oneof value {
+    GUIBasicType basic = 1;
+    GUIBasicTypeList list = 2;
+  }
+}
+
+message GUIArgument {
+  oneof value {
+    GUIComposedType arg = 1;
+    GUIKeyValuePair kwarg = 2;
+  }
+}
+
+message GUIKeyValuePair {
+  optional string key = 1;
+  optional GUIComposedType value = 2; 
+}
+
+message GUIActionResult {
+  optional bool success = 1;
+  optional string details = 2;
+  optional GUIServerObjectProperty value = 3;
+}
+
+message GUIServerObjectPropertyValue {
+  oneof value {
+    BusinessLogicString str = 1;
+    BusinessLogicInteger int = 2;
+    BusinessLogicBool boolean = 3;
+    BusinessLogicTimePoint timePoint = 4;
+    BusinessLogicStringList strList = 5;
+    BusinessLogicObject object = 6;
+    GUIServerObject serverObject = 7;
+    GUIServerObjectList serverObjectList = 8;
+    GUIColor color = 9;
+    NoParameters noParameters = 10;
+    BusinessLogicRadix radix = 11;
+    TraceType traceType = 12;
+    BusinessLogicSourceLocation sourceLocation = 13;
+    BusinessLogicSourceFile sourceFile = 14;
+    BusinessLogicLong long = 15;
+  }
+}
+
+message PairsEntry {
+  optional string key = 1;
+  optional GUIServerObjectPropertyValue value = 2;
+}
+
+message GUISimplePropertyMap {
+  repeated PairsEntry pairs = 1;
+}
+
+message ServerEvent {
+  optional string name = 1;
+  optional EventType type = 2;
+  optional string source = 3;
+  repeated BusinessLogicObject objects = 4;
+  optional uint32 x = 5;
+  optional uint32 y = 6;
+  optional string details = 7;
+  optional BusinessLogicTimePoint time = 8;
+  optional GUISimplePropertyMap properties = 9;
+}
+
+message GUIServerObjectList {
+  repeated GUIServerObject value = 1;
+}
+
+message GUIServerObjectProperty {
+  optional uint32 clientID = 1;
+  optional uint32 handle = 2;
+  optional string name = 3;
+}
+
+message GUIServerObjectPropertyMap {
+  repeated PairsEntry pairs = 1;
+}
+
+message GUIQuery {
+  optional uint32 handle = 1;
+  optional uint32 clientID = 2;
+  optional GUIQueryOptions options = 3;
+}
+
+message GUIQueryOptions {
+  repeated GUIQueryCriteria criteria = 1;
+  optional BusinessLogicResponseOptions responseOpts = 2; 
+}
+
+message GUIQueryCriteria {
+  optional GUICriteriaType type = 1;
+  optional BusinessLogicQueryOperand op = 2;
+  optional BusinessLogicQueryValue value = 3;
+}
+
+message Rows {
+  optional ERows rows = 1;
+}
+

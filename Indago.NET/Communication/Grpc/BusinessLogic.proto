@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package com.cadence.indago.scripting.businesslogic;
+package com.cadence.indago.scripting.generated;
 import "Common.proto";
 
 enum Language {
@@ -9,41 +9,41 @@ enum Language {
   UNSUPPORTED = 2;
 }
 
-enum BusinessPrimitiveType {
-  UNKNOWN = 0;
-  AND = 1;
-  NAND = 2;
-  OR = 3;
-  NOR = 4;
-  XOR = 5;
-  XNOR = 6;
-  BUF = 7;
-  NOT = 8;
-  BUFIF0 = 9;
-  BUFIF1 = 10;
-  NOTIF0 = 11;
-  NOTIF1 = 12;
-  NMOS = 13;
-  PMOS = 14;
-  CMOS = 15;
-  RNMOS = 16;
-  RPMOS = 17;
-  RCMOS = 18;
-  RTRAN = 19;
-  RTRANIF0 = 20;
-  RTRANIF1 = 21;
-  TRAN = 22;
-  TRANIF0 = 23;
-  TRANIF1 = 24;
-  PULLUP = 25;
-  PULLDOWN = 26;
-  SEQUDP = 27;
-  COMBUDP = 28;
-  CONTASSIGN = 29;
-  UNDEFINED = 30;
+enum BusinessLogicPrimitiveType {
+  PT_UNKNOWN = 0;
+  PT_AND = 1;
+  PT_NAND = 2;
+  PT_OR = 3;
+  PT_NOR = 4;
+  PT_XOR = 5;
+  PT_XNOR = 6;
+  PT_BUF = 7;
+  PT_NOT = 8;
+  PT_BUFIF0 = 9;
+  PT_BUFIF1 = 10;
+  PT_NOTIF0 = 11;
+  PT_NOTIF1 = 12;
+  PT_NMOS = 13;
+  PT_PMOS = 14;
+  PT_CMOS = 15;
+  PT_RNMOS = 16;
+  PT_RPMOS = 17;
+  PT_RCMOS = 18;
+  PT_RTRAN = 19;
+  PT_RTRANIF0 = 20;
+  PT_RTRANIF1 = 21;
+  PT_TRAN = 22;
+  PT_TRANIF0 = 23;
+  PT_TRANIF1 = 24;
+  PT_PULLUP = 25;
+  PT_PULLDOWN = 26;
+  PT_SEQUDP = 27;
+  PT_COMBUDP = 28;
+  PT_CONTASSIGN = 29;
+  PT_UNDEFINED = 30;
 }
 
-enum BusinessPrimitiveCriteriaType {
+enum BusinessLogicCriteriaType {
   NONE = 0;
   DEPTH = 1;
   NAME = 2;
@@ -83,12 +83,12 @@ enum BusinessPrimitiveCriteriaType {
   IS_ACTIVE = 36;
 }
 
-enum BusinessPrimitivePortType {
+enum BusinessLogicPortType {
   REGULAR = 0;
   PGPIN = 1;
 }
 
-enum BusinessPrimitivePgPinType {
+enum BusinessLogicPgPinType {
   PRIMARY_POWER_PIN = 0;
   PRIMARY_GROUND_PIN = 1;
   DEEPPWELL_PIN = 2;
@@ -105,7 +105,7 @@ enum BusinessPrimitivePgPinType {
 message BusinessLogicDriver {
   optional uint32 handle = 1;
   optional string name   = 2;
-  optional com.cadence.indago.scripting.common.BusinessLogicTimePoint time = 3;
+  optional BusinessLogicTimePoint time = 3;
   optional bool active = 4;
   optional bool xprop = 5;
   optional bool noConnection = 6;
@@ -126,9 +126,9 @@ message BusinessLogicPort {
   optional uint32 handles = 1;
   optional string name    = 2;
   optional string path    = 3;
-  optional com.cadence.indago.scripting.common.Direction direction = 4;
+  optional Direction direction = 4;
   optional BusinessLogicOptionalInternal loconn = 5;
-  optioanl BusinessLogicInternalList     hiconn = 6;
+  optional BusinessLogicInternalList     hiconn = 6;
   optional uint32 size    = 7;
   optional BusinessLogicPortType type = 8;
   optional BusinessLogicPgPinType pgPinType = 9;
@@ -137,7 +137,7 @@ message BusinessLogicPort {
 message BusinessLogicDeclaration {
   optional uint32 handle = 1;
   optional string name   = 2;
-  optional com.cadence.indago.scripting.common.BusinessLogicInternalType type = 3;
+  optional BusinessLogicInternalType type = 3;
   optional BusinessLogicSourceLocation source = 4;
   optional string compilation_library = 5;
   optional Language language = 6;
@@ -150,7 +150,7 @@ message BusinessLogicScope {
   optional uint32 handle = 1;
   optional string name   = 2;
   optional string path   = 3;
-  optional com.cadence.indago.scripting.common.BusinessLogicInternalType type = 4;
+  optional BusinessLogicInternalType type = 4;
   optional bool   no_declaration = 6;
   optional BusinessLogicDeclaration fetched_declaration = 7;
 }
@@ -212,7 +212,7 @@ message BusinessLogicInternal {
   optional uint32 handle = 1;
   optional string name   = 2;
   optional string path   = 3;
-  optional com.cadence.indago.scripting.common.BusinessLogicInternalType type = 4;
+  optional BusinessLogicInternalType type = 4;
   optional uint32 size   = 5;
   oneof value {
     bool no_value = 8;
@@ -236,7 +236,139 @@ message BusinessLogicOptionalInternal {
   }
 }
 
+message BusinessLogicTextReference {
+  optional BusinessLogicSourceLocation source = 1;
+  optional BusinessLogicScope parent = 2;
+  optional string text = 3;
+  optional BusinessLogicObject object = 4;
+  optional string annotation = 5;
+}
 
+message BusinessLogicSmartLogMessage {
+  optional BusinessLogicTimePoint time = 1;
+  optional string message = 2;
+  optional BusinessLogicMessageVerbosity verbosity = 3;
+  optional BusinessLogicMessageType type = 4;
+  optional BusinessLogicSourceLocation source = 5;
+  optional string tag = 6;
+  optional uint32 index = 7;
+  optional string destination = 8;
+}
 
+message BusinessLogicObject {
+  oneof object {
+    BusinessLogicInternal internal = 1;
+    BusinessLogicScope scope = 2;
+    BusinessLogicDriver driver = 3;
+    BusinessLogicSmartLogMessage message = 4;
+    BusinessLogicString string = 5;
+    GUIComponent component = 6;
+  }
+}
+
+message BusinessLogicSourceLocation {
+  optional uint32 startLine = 1;
+  optional uint32 endLine = 2;
+  optional uint32 startColumn = 3;
+  optional uint32 endColumn = 4;
+  optional string file = 5;
+  optional string code = 6;
+}
+
+message BusinessLogicQuery {
+  optional uint32 handle = 1;
+  optional uint32 clientID = 2;
+  optional BusinessLogicQueryOptions options = 3;
+}
+
+message BusinessLogicQueryOptions {
+  repeated BusinessLogicQueryCriteria criteria = 1;
+  optional BusinessLogicResponseOptions responseOpts = 2;
+}
+
+message BusinessLogicQueryCriteria {
+  optional BusinessLogicCriteriaType type = 1;
+  optional BusinessLogicQueryOperand operand = 2;
+  optional BusinessLogicQueryValue value = 3;
+}
+
+message BusinessLogicHandleList {
+  repeated BusinessLogicHandle value = 1;
+}
+
+message BusinessLogicDeclarationList {
+  repeated BusinessLogicDeclaration value = 1;
+}
+
+message BusinessLogicScopeList {
+  repeated BusinessLogicScope value = 1;
+}
+
+message BusinessLogicPowerDomainList {
+  repeated BusinessLogicPowerDomain value = 1;
+}
+
+message BusinessLogicIsolationStrategyList {
+  repeated BusinessLogicIsolationStrategy value = 1;
+}
+
+message BusinessLogicSupplyNetAndRoleList {
+  repeated BusinessLogicSupplyNetAndRole value = 1;
+}
+
+message BusinessLogicSupplySetAndRoleList {
+  repeated BusinessLogicSupplySetAndRole value = 1;
+}
+
+message BusinessLogicSupplySetList {
+  repeated BusinessLogicSupplySet value = 1;
+}
+
+message BusinessLogicRetentionStrategyList {
+  repeated BusinessLogicRetentionStrategy value = 1;
+}
+
+message BusinessLogicPortList {
+  repeated BusinessLogicPort value = 1;
+}
+
+message BusinessLogicInternalList {
+  repeated BusinessLogicInternal value = 1;
+}
+
+message BusinessLogicDriverList {
+  repeated BusinessLogicDriver value = 1;
+}
+
+message BusinessLogicLoadList {
+  repeated BusinessLogicLoad value = 1;
+}
+
+message BusinessLogicSmartLogMessageList {
+  repeated BusinessLogicSmartLogMessage value = 1;
+}
+
+message BusinessLogicTextReferenceList {
+  repeated BusinessLogicTextReference value = 1;
+}
+
+message BusinessLogicValueDataList {
+  repeated BusinessLogicValueData value = 1;
+}
+
+message BusinessLogicHandle {
+  optional uint32 value = 1;
+}
+
+message BusinessLogicStringList {
+  repeated BusinessLogicString value = 1;
+}
+
+message BusinessLogicClientInfo {
+  optional string host = 1;
+  optional string port = 2;
+  optional string clientPath = 3;
+  optional bool embedded = 4;
+}
 
 

@@ -1,21 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <RootNamespace>Indago</RootNamespace>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <Protobuf Include="Communication\Grpc\BusinessLogic.proto" GrpcServices="Client" />
-        <PackageReference Include="Google.Protobuf" Version="3.25.1" />
-      <PackageReference Include="Grpc.Net.Client" Version="2.60.0-pre1" />
-      <PackageReference Include="Grpc.Tools" Version="2.60.0">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-      <PackageReference Include="YamlDotNet" Version="13.7.1" />
-    </ItemGroup>
-
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Indago</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.25.1" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.60.0-pre1" />
+    <PackageReference Include="Grpc.Net.ClientFactory" Version="2.32.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.60.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="System.Linq.Expressions" Version="4.3.0" />
+    <PackageReference Include="YamlDotNet" Version="13.7.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Protobuf Include="Communication\Grpc\Common.proto" GrpcServices="Client" AdditionalImportDirs="Communication\Grpc\" />
+    <Protobuf Include="Communication\Grpc\BusinessLogic.proto" GrpcServices="Client" AdditionalImportDirs="Communication\Grpc\" />
+    <Protobuf Include="Communication\Grpc\Gui.proto" GrpcServices="Client" AdditionalImportDirs="Communication\Grpc\" />
+    <Protobuf Include="Communication\Grpc\Server.proto" GrpcServices="Client" AdditionalImportDirs="Communication\Grpc\" />
+  </ItemGroup>
 </Project>

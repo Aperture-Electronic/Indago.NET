@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package com.cadence.indago.scripting.generated;
+import "Common.proto";
+import "BusinessLogic.proto";
+import "Gui.proto";
+
+service BL {
+  rpc get_handle_by_name (BusinessLogicString) returns (BusinessLogicHandle);
+  rpc get_object_by_name (BusinessLogicString) returns (BusinessLogicObject);
+  rpc get_internals (BusinessLogicQuery) returns (stream BusinessLogicInternalList);
+  rpc get_scopes (BusinessLogicQuery) returns (BusinessLogicScopeList);
+  rpc get_full_paths (BusinessLogicQuery) returns (BusinessLogicStringList);
+  rpc get_parent (BusinessLogicQuery) returns (BusinessLogicOptionalScope);
+  rpc get_ports (BusinessLogicQuery) returns (BusinessLogicPortList);
+  rpc get_database (BusinessLogicQuery) returns (BusinessLogicDatabase);
+  rpc get_source_location (BusinessLogicQuery) returns (BusinessLogicSourceLocation);
+  rpc get_instance_connection (BusinessLogicQuery) returns (BusinessLogicOptionalScope);
+  rpc get_expression (BusinessLogicQuery) returns (BusinessLogicInternal);
+  rpc get_declarations (BusinessLogicQuery) returns (BusinessLogicDeclarationList);
+  rpc get_declaration_names (BusinessLogicQuery) returns (BusinessLogicStringList);
+  rpc smartlog_messages (BusinessLogicQuery) returns (BusinessLogicSmartLogMessageList);
+  rpc is_power_aware (BusinessLogicQuery) returns (BusinessLogicBool);
+  rpc get_all_power_domains (BusinessLogicQuery) returns (BusinessLogicPowerDomainList);
+  rpc get_power_domain (BusinessLogicQuery) returns (BusinessLogicPowerDomain);
+  rpc get_isolation_ports (BusinessLogicQuery) returns (BusinessLogicPortList);
+  rpc get_supply_sets_of_power_domain (BusinessLogicQuery) returns (BusinessLogicSupplySetList);
+  rpc get_supply_nets_of_supply_net (BusinessLogicQuery) returns (BusinessLogicSupplyNetAndRoleList);
+  rpc send_simulator_command (BusinessLogicString) returns (BusinessLogicString);
+  rpc is_liberty (BusinessLogicQuery) returns (BusinessLogicBool);
+  rpc get_isolation_strategy_of_power_domain (BusinessLogicQuery) returns (BusinessLogicIsolationStrategy);
+  rpc get_retention_strategy_of_power_domain (BusinessLogicQuery) returns (BusinessLogicRetentionStrategy);
+  rpc get_instances_of_power_domain (BusinessLogicQuery) returns (BusinessLogicScopeList);
+  rpc has_pg_pins (BusinessLogicQuery) returns (BusinessLogicBool);
+  rpc get_liberty_source_of_scope (BusinessLogicQuery) returns (BusinessLogicSourceLocation);
+  rpc is_liberty_inside_liberty (BusinessLogicQuery) returns (BusinessLogicBool);
+  rpc get_supply_sets (BusinessLogicQuery) returns (BusinessLogicSupplySetList);
+  rpc get_connections (BusinessLogicQuery) returns (BusinessLogicInternalList);
+  rpc get_drivers (BusinessLogicQuery) returns (BusinessLogicDriverList);
+  rpc get_loads (BusinessLogicQuery) returns (BusinessLogicLoadList);
+  rpc get_current_time (NoParameters) returns (BusinessLogicTimePoint);
+  rpc set_current_time (BusinessLogicTimePoint) returns (NoParameters);
+  rpc get_value_at_time (BusinessLogicQuery) returns (BusinessLogicString);
+  rpc get_values (BusinessLogicQuery) returns (BusinessLogicTimeValueList);
+  rpc get_num_transitions (BusinessLogicQuery) returns (BusinessLogicInteger);
+  rpc close (BusinessLogicInteger) returns (NoParameters);
+  rpc get_session_info (BusinessLogicQuery) returns (SessionInfo);
+  rpc get_pending_events(BusinessLogicQuery) returns (gui.ServerEvent);
+  rpc start_session (BusinessLogicClientInfo) returns (BusinessLogicInteger);
+  rpc end_session (BusinessLogicQuery) returns (NoParameters);
+  rpc open_database (BusinessLogicQuery) returns (BusinessLogicDatabase);
+  rpc close_database (BusinessLogicQuery) returns (NoParameters);
+  rpc create_database (BusinessLogicQuery) returns (BusinessLogicDatabase);
+  rpc select_database (BusinessLogicQuery) returns (BusinessLogicDatabase);
+  rpc write_transaction (BusinessLogicValueDataList) returns (gui.GUIActionResult);
+  rpc write_signal (BusinessLogicValueDataList) returns (gui.GUIActionResult);
+  rpc autocomplete_action (BusinessLogicString) returns (NoParameters);
+  rpc print_to_console (BusinessLogicString) returns (NoParameters);
+  rpc get_text_refs (BusinessLogicQuery) returns (BusinessLogicTextReferenceList);
+  rpc get_source_files (BusinessLogicQuery) returns (BusinessLogicStringList);
+  rpc switch_performance_logs (BusinessLogicBool) returns (NoParameters);
+  rpc get_file_paths (BusinessLogicString) returns (BusinessLogicStringList);
+}
+
+service GUI {
+  rpc do_action (gui.GUIAction) returns (gui.GUIActionResult);
+  rpc get_server_objects (BusinessLogicQuery) returns (gui.GUIServerObjectList);
+  rpc get_server_object_properties (gui.GUIQuery) returns (gui.GUIServerObjectPropertyMap);
+  rpc set_server_object_property (gui.GUIServerObjectProperty) returns (gui.GUIActionResult);
+  rpc create_widget (gui.GUIAction) returns (gui.GUIActionResult);
+}

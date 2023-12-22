@@ -1,3 +1,5 @@
+using Com.Cadence.Indago.Scripting.Generated;
+
 namespace Indago.DataTypes;
 
 public static class TimeUnitExtension

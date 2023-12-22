@@ -5,9 +5,15 @@ namespace Indago.DataTypes;
 /// </summary>
 public class IndagoArgs(string? indagoRoot = null, bool isGui = false,
     string? dbPath = null, bool isLaunchNeeded = true,
-    int? port = null, string host = "localhost", string? lwd = null, IEnumerable<string>? extraArgs = null)
+    int? port = null, string host = "localhost", string? lightWeightDatabase = null, IEnumerable<string>? extraArgs = null,
+    bool embedded = false)
 {
-    public string? IndagoRoot => indagoRoot;
+    public string? IndagoRoot
+    {
+        get => indagoRoot;
+        set => indagoRoot = value;
+    }
+    
     public bool IsGui => isGui;
     public string? DbPath => dbPath;
     public bool IsLaunchNeeded => isLaunchNeeded;
@@ -19,7 +25,10 @@ public class IndagoArgs(string? indagoRoot = null, bool isGui = false,
     }
     
     public string Host => host;
-    public string? Lwd => lwd;
+    public string? LightWeightDatabase => lightWeightDatabase;
+
+    public bool Embedded => embedded;
+    
     public IEnumerable<string>? ExtraArgs => extraArgs;
 
     public IEnumerable<string> GetParameterList()
@@ -29,7 +38,7 @@ public class IndagoArgs(string? indagoRoot = null, bool isGui = false,
         if (!isGui) yield return "-nogui";
         if (port is not null) yield return $"-port {port}";
         if (dbPath is not null) yield return $"-db {dbPath}";
-        if (lwd is not null) yield return $"-lwd {lwd}";
+        if (lightWeightDatabase is not null) yield return $"-lwd {lightWeightDatabase}";
         if (extraArgs is not null) yield return string.Join(" ", extraArgs);
     }
 }

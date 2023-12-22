@@ -6,8 +6,11 @@ namespace Indago.LogFlow;
 
 public static class IndagoLog
 {
-    public static bool IndagoScriptingClientDebug => 
-        bool.Parse(Environment.GetEnvironmentVariable("INDAGO_SCRIPTING_CLIENT_DEBUG") ?? "false");
+    public static bool IndagoScriptingClientDebug =>
+        Environment.GetEnvironmentVariable("INDAGO_SCRIPTING_CLIENT_DEBUG") is not null;
+
+    public static bool IndagoScriptingDisableWatcher =>
+        Environment.GetEnvironmentVariable("INDAGO_SCRIPTING_DISABLE_WATCHER") is not null;
 
     private static string DumpYaml(object data)
     {
@@ -25,4 +28,6 @@ public static class IndagoLog
         var prefix = $"{methodName} - {dataName}";
         logger($"{prefix}:\n{logData}");
     }
+    
+    public static void Log(object data, Action<object> logger) => logger(data);
 }

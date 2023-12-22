@@ -1,5 +1,5 @@
 syntax = "proto3";
-package com.cadence.indago.scripting.common;
+package com.cadence.indago.scripting.generated;
 
 enum BusinessLogicEdgeType {  
   ANY = 0;
@@ -145,7 +145,7 @@ enum BusinessLogicExpressionType {
   EXPR_FALLING_EDGE_COUNTER = 6;
 }
 
-enum BusinessLogicOperand {
+enum BusinessLogicQueryOperand {
   OP_DEFAULT = 0;
   EQUALS = 1;
   GREATER_THAN = 2;
