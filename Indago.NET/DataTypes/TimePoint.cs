@@ -214,9 +214,29 @@ public partial class TimePoint : IEquatable<TimePoint>, IEqualityComparer<TimePo
     public static implicit operator TimePoint((ulong time, TimeUnit units) tp)
         => new(tp.time, tp.units);
 
+    /// <summary>
+    /// Directly parse the time string to <see cref="TimePoint"/>
+    /// </summary>
     public static implicit operator TimePoint(string tp) => new(tp);
 
+    /// <summary>
+    /// Convert a value and a string units to <see cref="TimePoint"/>
+    /// The units string will be parsed by <see cref="TimeUnitExtension.ParseTimeUnit"/>
+    /// </summary>
     public static implicit operator TimePoint((ulong time, string unitString) tp)
         => new(tp.time, tp.unitString.ParseTimeUnit());
 
+    /// <summary>
+    /// Convert .NET standard <see cref="TimeSpan"/> to <see cref="TimePoint"/>
+    /// Note: The result is in nanoseconds units
+    /// </summary>
+    public static implicit operator TimePoint(TimeSpan timeSpan)
+        => new((ulong)timeSpan.TotalNanoseconds, TimeUnit.Nanoseconds);
+
+    /// <summary>
+    /// Convert <see cref="TimePoint"/> to .NET standard <see cref="TimeSpan"/>
+    /// Caution: This method will loss precision significantly
+    /// </summary>
+    public static implicit operator TimeSpan(TimePoint timePoint)
+        => new TimeSpan((long)timePoint.ConvertUnitTo(TimeUnit.Nanoseconds).Time / TimeSpan.NanosecondsPerTick);
 }

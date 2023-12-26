@@ -4,11 +4,18 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>Indago</RootNamespace>
+    <Version>0.1.0</Version>
+    <Title>Indago.NET</Title>
+    <Authors>Onodera Tsusaki</Authors>
+    <Description>.NET Scripting Engine for Cadence(R) Indago(R) Interactive Verification Enviroment</Description>
+    <RepositoryUrl>https://git.apertureelectronic.tech:8999/onodera/indago.net</RepositoryUrl>
+    <AssemblyVersion>0.1.0</AssemblyVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.25.1" />
-    <PackageReference Include="Grpc.Net.Client" Version="2.60.0-pre1" />
-    <PackageReference Include="Grpc.Net.ClientFactory" Version="2.32.0" />
+    <PackageReference Include="Grpc.Core.Api" Version="2.59.0" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.59.0" />
     <PackageReference Include="Grpc.Tools" Version="2.60.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

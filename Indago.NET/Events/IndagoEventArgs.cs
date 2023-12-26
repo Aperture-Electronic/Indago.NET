@@ -10,6 +10,6 @@ public class IndagoEventArgs(ServerEvent originalEvent) : EventArgs
     public EventType Type => originalEvent.Type;
 
     protected Dictionary<string, GUIServerObjectPropertyValue> Properties { get; } =
-        originalEvent.Properties.Pairs.ToDictionary<PairsEntry?, string, GUIServerObjectPropertyValue>
+        originalEvent.Properties.Pairs.ToDictionary<PairsEntry, string, GUIServerObjectPropertyValue>
             (property => property.Key, property => property.Value);
 }
