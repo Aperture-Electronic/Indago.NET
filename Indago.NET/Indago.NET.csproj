@@ -22,4 +22,7 @@
     <Protobuf Include="Communication\Grpc\Gui.proto" GrpcServices="Client" AdditionalImportDirs="Communication\Grpc\" />
     <Protobuf Include="Communication\Grpc\Server.proto" GrpcServices="Client" AdditionalImportDirs="Communication\Grpc\" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Communication\Query\" />
+  </ItemGroup>
 </Project>

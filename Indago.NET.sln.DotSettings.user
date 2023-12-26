@@ -1,19 +1,9 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=51c79602_002D8812_002D46ac_002D83a6_002D77b8c7b48a92/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TestGetSignalValue #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=51c79602_002D8812_002D46ac_002D83a6_002D77b8c7b48a92/@EntryIndexedValue">JetBrains.ReSharper.UnitTestFramework.Session.Serialization.SessionState</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=dc4566ac_002Dbe4f_002D4d85_002Dac28_002D587bae801b40/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TestGetSignalValue" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;MSTest::43E3F18F-3717-4789-BC28-AD0EE8570C76::net8.0::TestIndago.NET.TestCoreFunction.TestGetSignalValue&lt;/TestId&gt;
-    &lt;TestId&gt;MSTest::43E3F18F-3717-4789-BC28-AD0EE8570C76::net8.0::TestIndago.NET.TestCoreFunction.TestSignalQuery&lt;/TestId&gt;
-    &lt;TestId&gt;MSTest::43E3F18F-3717-4789-BC28-AD0EE8570C76::net8.0::TestIndago.NET.TestCoreFunction.TestGetSignalValueAtTime&lt;/TestId&gt;
-    &lt;TestId&gt;MSTest::43E3F18F-3717-4789-BC28-AD0EE8570C76::net8.0::TestIndago.NET.TestAnalyzable.TestVerilogNumberLiteralParse&lt;/TestId&gt;
-    &lt;TestId&gt;MSTest::43E3F18F-3717-4789-BC28-AD0EE8570C76::net8.0::TestIndago.NET.TestCoreFunction.TestGetSignalValueAtTimeAndAnalyze&lt;/TestId&gt;
-    &lt;TestId&gt;MSTest::43E3F18F-3717-4789-BC28-AD0EE8570C76::net8.0::TestIndago.NET.TestCoreFunction.TestSetCurrentTime&lt;/TestId&gt;
-    &lt;TestId&gt;MSTest::43E3F18F-3717-4789-BC28-AD0EE8570C76::net8.0::TestIndago.NET.TestCoreFunction.TestGetScopes&lt;/TestId&gt;
-    &lt;TestId&gt;MSTest::43E3F18F-3717-4789-BC28-AD0EE8570C76::net8.0::TestIndago.NET.TestCoreFunction.TestGetHierarchy&lt;/TestId&gt;
-    &lt;TestId&gt;MSTest::43E3F18F-3717-4789-BC28-AD0EE8570C76::net8.0::TestIndago.NET.TestCoreFunction.TestGetSignalsUnderScope&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=dc4566ac_002Dbe4f_002D4d85_002Dac28_002D587bae801b40/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestGetSignalValue" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;MSTest::43E3F18F-3717-4789-BC28-AD0EE8570C76::net8.0::TestIndago.NET.TestCoreFunction.TestGetSignalValue&lt;/TestId&gt;
+    &lt;TestId&gt;MSTest::43E3F18F-3717-4789-BC28-AD0EE8570C76::net8.0::TestIndago.NET.TestEventSystem.TestEventThread&lt;/TestId&gt;
+    &lt;TestId&gt;MSTest::43E3F18F-3717-4789-BC28-AD0EE8570C76::net8.0::TestIndago.NET.TestEventSystem.TestCDLEventMoniting&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

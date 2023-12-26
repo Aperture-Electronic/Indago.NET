@@ -8,7 +8,7 @@ namespace TestIndago.NET;
 [TestClass]
 public class TestCoreFunction
 {
-    private static readonly IndagoArgs args = new IndagoArgs(isLaunchNeeded: false, port: 43079);
+    private static readonly IndagoArgs args = new IndagoArgs(isLaunchNeeded: false, port: 33681);
     private static readonly ClientPerferences clientPerf = new ClientPerferences();
     private static readonly IndagoServer server = new IndagoServer(args, clientPerf);
     

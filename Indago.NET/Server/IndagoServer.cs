@@ -7,7 +7,7 @@ using Indago.Query.Context;
 
 namespace Indago.Server;
 
-public class IndagoServer : IDesignScope
+public class IndagoServer : IDesignScope, IDisposable
 {
     private IndagoArgs Arguments { get; }
     private ClientPerferences ClientPerferences { get; }
@@ -91,7 +91,7 @@ public class IndagoServer : IDesignScope
         
         if (Connection?.Alive == true)
         {
-            Implementation = new(Arguments, Connection);
+            Implementation = new(Arguments, Connection, this);
         }
         else
         {
@@ -100,6 +100,17 @@ public class IndagoServer : IDesignScope
         
         SignalContext = new(Implementation);
         ScopeContext = new(Implementation);
+    }
+
+    /// <summary>
+    /// The event system to register and monitoring events from Indago Server
+    /// </summary>
+    public IIndagoEventSystem EventSystem => Implementation?.EventSystem ?? throw new IndagoInternalError("Cannot get event system from Indago server.");
+    
+    public void Dispose()
+    {
+        Implementation?.Dispose();
+        Process?.Dispose();
     }
 
     public string Name => "";

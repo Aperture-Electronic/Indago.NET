@@ -5,7 +5,7 @@ using Indago.ExceptionFlow;
 
 namespace Indago.Communication;
 
-public class IndagoConnection
+public class IndagoConnection : IDisposable
 {
    private IndagoArgs Arguments { get; }
    private int Timeout { get; }
@@ -39,4 +39,6 @@ public class IndagoConnection
          throw new IndagoTimeoutError($"Connect to {grpcUrl} timed out after {timeout}ms");
       }
    }
+
+   public void Dispose() => Channel.Dispose();
 }

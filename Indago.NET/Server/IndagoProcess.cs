@@ -8,7 +8,7 @@ using Indago.LogFlow;
 
 namespace Indago.Server;
 
-public class IndagoProcess
+public class IndagoProcess : IDisposable
 {
     private const int IndagoBindErrorStatus = 188;
     private IndagoArgs Arguments { get; }
@@ -146,5 +146,10 @@ public class IndagoProcess
         {
             Process.Kill();
         }
+    }
+    
+    public void Dispose()
+    {
+        Kill();
     }
 }

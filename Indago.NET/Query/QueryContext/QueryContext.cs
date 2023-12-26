@@ -55,7 +55,7 @@ public abstract class QueryContext<T>(RepeatedField<BusinessLogicQueryCriteria> 
         // If right is MemberAccess but left not, swap them
         var (left, right) = (expression.Left, expression.Right);
         if ((expression.Left.NodeType != ExpressionType.MemberAccess) || 
-            (expression.Left.NodeType == ExpressionType.MemberAccess && ((MemberExpression)expression.Left).Member.DeclaringType == typeof(T)))
+            (expression.Left.NodeType == ExpressionType.MemberAccess && ((MemberExpression)expression.Left).Member.DeclaringType != typeof(T)))
         {
             (left, right) = (right, left);
         }

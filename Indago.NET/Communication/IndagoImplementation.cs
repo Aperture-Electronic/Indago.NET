@@ -1,24 +1,40 @@
 using System.Collections;
 using Com.Cadence.Indago.Scripting.Generated;
+using Com.Cadence.Indago.Scripting.Generated.Gui;
 using Grpc.Core;
 using Indago.DataTypes;
 using Indago.ExceptionFlow;
+using Indago.Interfaces;
 using Indago.LogFlow;
 using Indago.Query;
+using Indago.Server;
 using SessionInfo = Indago.DataTypes.SessionInfo;
 
 namespace Indago.Communication;
 
-public class IndagoImplementation
+public class IndagoImplementation : IDisposable
 {
+    private IndagoServer Server { get; }
     private IndagoArgs Arguments { get; }
     private IndagoConnection Connection { get; }
+    
+    private IndagoEventThread EventThread { get; }
     private BL.BLClient BusinessLogicClient { get; }
     
     public uint ClientId { get; }
-    
-    public IndagoImplementation(IndagoArgs args, IndagoConnection connection)
+
+    public IIndagoEventSystem EventSystem => EventThread;
+
+    public void Dispose()
     {
+        EventThread.Stop();
+        BusinessLogicClient.end_session(IndagoQuery.Create(ClientId));
+        Connection.Dispose();
+    }
+
+    public IndagoImplementation(IndagoArgs args, IndagoConnection connection, IndagoServer server)
+    {
+        Server = server;
         Arguments = args;
         Connection = connection;
 
@@ -44,10 +60,10 @@ public class IndagoImplementation
         {
             // TODO: Gui ready
         }
-        
-        // TODO: Start event thread
-        
-        
+
+        // Start event thread
+        EventThread = new(this, server);
+        EventThread.Start();
     }
 
     private async Task<uint> StartSessionAsync()
@@ -84,6 +100,7 @@ public class IndagoImplementation
     
     public async Task<IEnumerable<BusinessLogicInternal>> GetInternals(BusinessLogicQuery query)
     {
+        IndagoQuery.AssignByClient(query, ClientId);
         List<BusinessLogicInternal> internals = [];
         
         var stream = BusinessLogicClient.get_internals(query);
@@ -97,6 +114,7 @@ public class IndagoImplementation
 
     public async Task<BusinessLogicScopeList> GetScopes(BusinessLogicQuery query)
     {
+        IndagoQuery.AssignByClient(query, ClientId);
         BusinessLogicScopeList scopes = new();
         
         var stream = BusinessLogicClient.get_scopes(query);
@@ -110,6 +128,7 @@ public class IndagoImplementation
 
     public async Task<BusinessLogicScopeList> GetParent(BusinessLogicQuery query)
     {
+        IndagoQuery.AssignByClient(query, ClientId);
         BusinessLogicScopeList scopeList = new();
         
         var scope = await BusinessLogicClient.get_parentAsync(query);
@@ -124,6 +143,7 @@ public class IndagoImplementation
 
     public async Task<BusinessLogicTimeValueList> GetValues(BusinessLogicQuery query)
     {
+        IndagoQuery.AssignByClient(query, ClientId);
         BusinessLogicTimeValueList values = new();
 
         var stream = BusinessLogicClient.get_values(query);
@@ -137,6 +157,7 @@ public class IndagoImplementation
 
     public async Task<BusinessLogicString> GetValueAtTime(BusinessLogicQuery query)
     {
+        IndagoQuery.AssignByClient(query, ClientId);
         var value = await BusinessLogicClient.get_value_at_timeAsync(query);
         return value;
     }
@@ -148,7 +169,20 @@ public class IndagoImplementation
     }
 
     public async Task SetCurrentTime(BusinessLogicTimePoint timePoint)
+        => await BusinessLogicClient.set_current_timeAsync(timePoint);
+
+    public async Task<List<ServerEvent>> GetPendingEvents()
     {
-        await BusinessLogicClient.set_current_timeAsync(timePoint);
+        List<ServerEvent> pendingEvents = [];
+        
+        var query = IndagoQuery.Create(ClientId);
+        var stream = BusinessLogicClient.get_pending_events(query);
+
+        while (await stream.ResponseStream.MoveNext())
+        {
+            pendingEvents.Add(stream.ResponseStream.Current);
+        }
+
+        return pendingEvents;
     }
 }

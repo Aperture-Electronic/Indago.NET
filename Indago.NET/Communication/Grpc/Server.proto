@@ -45,7 +45,7 @@ service BL {
   rpc get_num_transitions (BusinessLogicQuery) returns (BusinessLogicInteger);
   rpc close (BusinessLogicInteger) returns (NoParameters);
   rpc get_session_info (BusinessLogicQuery) returns (SessionInfo);
-  rpc get_pending_events(BusinessLogicQuery) returns (gui.ServerEvent);
+  rpc get_pending_events(BusinessLogicQuery) returns (stream gui.ServerEvent);
   rpc start_session (BusinessLogicClientInfo) returns (BusinessLogicInteger);
   rpc end_session (BusinessLogicQuery) returns (NoParameters);
   rpc open_database (BusinessLogicQuery) returns (BusinessLogicDatabase);
