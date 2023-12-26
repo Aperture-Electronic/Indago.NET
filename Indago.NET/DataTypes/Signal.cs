@@ -1,6 +1,11 @@
 using System.Linq.Expressions;
 using Com.Cadence.Indago.Scripting.Generated;
+using Google.Protobuf.Collections;
+using Indago.Communication;
 using Indago.ExceptionFlow;
+using Indago.Interfaces;
+using Indago.Query.Context;
+using Indago.Server;
 
 namespace Indago.DataTypes;
 
@@ -10,8 +15,13 @@ namespace Indago.DataTypes;
 /// For example, wires, registers, logic, etc. are
 /// all represented by the signal type.
 /// </summary>
-public class Signal(BusinessLogicInternal blInternal)
+public class Signal(IndagoImplementation impl, BusinessLogicInternal blInternal) : IDesignSignal, IQueryCriteria
 {
+    /// <summary>
+    /// The handle of the signal for further query
+    /// </summary>
+    private uint handle => blInternal.Handle;
+    
     /// <summary>
     /// The name of the signal
     /// </summary>
@@ -44,11 +54,9 @@ public class Signal(BusinessLogicInternal blInternal)
     public DeclarationType Type => blInternal.Type.ToDeclarationType();
 
     /// <summary>
-    /// Depth in design of the signal (only for query)
-    /// Please note that the default query depth is 1
-    /// If you want to get all depth's signals, please set criteria <see cref="Depth"/>>0
+    /// Depth in design of the signal
     /// </summary>
-    public int Depth { get; set; }
+    public int Depth => FullPath.Count(c => c == '.');
 
     /// <summary>
     /// Full path of the signal
@@ -62,17 +70,60 @@ public class Signal(BusinessLogicInternal blInternal)
     public Language Language => blInternal.Language.ToLanguage();
 
     /// <summary>
-    /// Get the declaration information for this signal.
+    /// Get the declaration information for this <see cref="Signal"/>.
     /// It includes the name, type, source location, etc.
     /// Please note the declaration information is only available
     /// when the signal is queried by set the argument
     /// withDeclaration to true
-    /// of <see cref="Server.IndagoServer.GetSignals"/>
     /// </summary>
     /// <seealso cref="DataTypes.Declaration"/>
-    /// <seealso cref="Server.IndagoServer.GetSignals"/>
     public Declaration? Declaration { get; } =
         blInternal.HasNoDeclaration ? null : new Declaration(blInternal.FetchedDeclaration);
+
+    private ValueContext ValueContext { get; } = new(impl, blInternal.Handle);
+    
+    /// <summary>
+    /// Get the querable value list of the <see cref="Signal"/>.
+    /// </summary>
+    /// <param name="startTime">Set the minimal time of the returned time-value pairs, null means no-set</param>
+    /// <param name="endTime">Set the maximal time of the returned time-value pairs, null means no-set</param>
+    /// <param name="units">Time unit of the returned time-value pairs</param>
+    /// <returns>A queryable list of the signal list contains time-value pairs</returns>
+    public IQueryable<TimeValue> Values(TimePoint? startTime = null, TimePoint? endTime = null, TimeUnit units = TimeUnit.Picoseconds)
+    {
+        ValueContext.StartTime = null;
+        ValueContext.EndTime = null;
+        ValueContext.Units = units;
+        return ValueContext;
+    }
+
+    /// <summary>
+    /// Get the value of the signal at the given time
+    /// </summary>
+    /// <param name="time">Specific time to get time-value pair</param>
+    /// <returns>Value queried at the specific time point for a signal</returns>
+    public TimeValue ValueAtTime(TimePoint time)
+    {
+        var queryOptions = new BusinessLogicQueryOptions();
+        
+        // Prepare the criteria
+        queryOptions.Criteria.Add(new BusinessLogicQueryCriteria()
+        {
+            Type = BusinessLogicCriteriaType.StartTime,
+            Operand = BusinessLogicQueryOperand.Equals,
+            Value = new() { Tp = time }
+        });
+
+        // Get the value
+        var value = impl.GetValueAtTime(new()
+        {
+            Handle = blInternal.Handle,
+            ClientID = impl.ClientId,
+            Options = queryOptions
+        }).Result;
+
+        return new(time, value);
+    }
     
     public static BusinessLogicCriteriaType GetCriteriaType(MemberExpression member)
     {
@@ -83,7 +134,7 @@ public class Signal(BusinessLogicInternal blInternal)
             nameof(Size) => BusinessLogicCriteriaType.Size,
             nameof(Depth) => BusinessLogicCriteriaType.Depth,
             nameof(FullPath) => BusinessLogicCriteriaType.FullPath,
-            _ => throw new IndagoCriteriaError($"Invalid criteria type for {nameof(Signal)}", memberName)
+            _ => throw new IndagoInvalidCriteriaTypeError($"Invalid criteria type for {nameof(Signal)}", memberName)
         };
     }
 

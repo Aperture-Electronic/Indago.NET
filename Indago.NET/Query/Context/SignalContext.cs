@@ -36,7 +36,7 @@ public class SignalContext : IQueryable<Signal>
         }
     }
     
-    public SignalContext(IndagoImplementation impl, uint handle = 0)
+    public SignalContext(IndagoImplementation impl, uint? handle = 0)
     {
         signalProvider = new(impl, handle, impl.ClientId);
         Expression = Expression.Constant(this);

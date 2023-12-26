@@ -1,19 +1,20 @@
 using Indago.Communication;
 using Indago.DataTypes;
 using Indago.ExceptionFlow;
+using Indago.Interfaces;
 using Indago.LogFlow;
 using Indago.Query.Context;
 
 namespace Indago.Server;
 
-public class IndagoServer
+public class IndagoServer : IDesignScope
 {
     private IndagoArgs Arguments { get; }
     private ClientPerferences ClientPerferences { get; }
     private IndagoProcess? Process { get; } = null;
-    public IndagoConnection? Connection { get; } = null;
+    private IndagoConnection? Connection { get; } = null;
     
-    public IndagoImplementation? Implementation { get; } = null;
+    private IndagoImplementation? Implementation { get; } = null;
     
     public IndagoServer(IndagoArgs args, ClientPerferences clientPerferences)
     {
@@ -98,8 +99,12 @@ public class IndagoServer
         }
         
         SignalContext = new(Implementation);
+        ScopeContext = new(Implementation);
     }
 
+    public string Name => "";
+    public string Path => "";
+    
     private SignalContext SignalContext { get; }
 
     /// <summary>
@@ -110,14 +115,39 @@ public class IndagoServer
     /// <returns>Queryable signal list that support LINQ query on it</returns>
     /// <seealso cref="Signal"/>
     /// <seealso cref="Declaration"/>
-    public IQueryable<Signal> GetSignals(bool withTransitions = false, bool withDeclaration = false)
+    public IQueryable<Signal> Signals(bool withTransitions = false, bool withDeclaration = false)
     {
         SignalContext.WithTransitions = withTransitions;
         SignalContext.WithDeclaration = withDeclaration;
 
         return SignalContext;
     }
+    
+    private ScopeContext ScopeContext { get; }
 
+    /// <summary>
+    /// Get the queryable scope list from the <see cref="IndagoServer"/>.
+    /// </summary>
+    /// <param name="withDeclaration">The fetched signals has declaration record</param>
+    /// <returns>Querable scope list that support LINQ query on it</returns>
+    /// <seealso cref="Scope"/>
+    /// <seealso cref="Declaration"/>
+    public IQueryable<Scope> Scopes(bool withDeclaration = false)
+    {
+        ScopeContext.WithDeclaration = withDeclaration;
+
+        return ScopeContext;
+    }
+
+    /// <summary>
+    /// The top scope of the design
+    /// </summary>
+    public Scope? TopScope(bool withDeclaration = false)
+    { 
+        var scopes = Scopes(withDeclaration).Where(s => s.Depth == 0).ToList();
+        return scopes.Count > 0 ? scopes[0] : null;
+    }
+    
     public TimePoint CurrentTime
     {
         get => Implementation?.GetCurrentTime().Result ?? 

@@ -95,6 +95,52 @@ public class IndagoImplementation
         return internals;
     }
 
+    public async Task<BusinessLogicScopeList> GetScopes(BusinessLogicQuery query)
+    {
+        BusinessLogicScopeList scopes = new();
+        
+        var stream = BusinessLogicClient.get_scopes(query);
+        while (await stream.ResponseStream.MoveNext())
+        {
+            scopes.Value.AddRange(stream.ResponseStream.Current.Value);
+        }
+
+        return scopes;
+    }
+
+    public async Task<BusinessLogicScopeList> GetParent(BusinessLogicQuery query)
+    {
+        BusinessLogicScopeList scopeList = new();
+        
+        var scope = await BusinessLogicClient.get_parentAsync(query);
+
+        if (!scope.NoScope)
+        {
+            scopeList.Value.Add(scope.Value);
+        }
+
+        return scopeList;
+    }
+
+    public async Task<BusinessLogicTimeValueList> GetValues(BusinessLogicQuery query)
+    {
+        BusinessLogicTimeValueList values = new();
+
+        var stream = BusinessLogicClient.get_values(query);
+        while (await stream.ResponseStream.MoveNext())
+        {
+            values.Value.AddRange(stream.ResponseStream.Current.Value);
+        }
+
+        return values;
+    }
+
+    public async Task<BusinessLogicString> GetValueAtTime(BusinessLogicQuery query)
+    {
+        var value = await BusinessLogicClient.get_value_at_timeAsync(query);
+        return value;
+    }
+
     public async Task<BusinessLogicTimePoint> GetCurrentTime()
     {
         var currentTime = await BusinessLogicClient.get_current_timeAsync(new NoParameters());

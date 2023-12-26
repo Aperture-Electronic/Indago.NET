@@ -8,21 +8,19 @@ using Indago.Query.QueryContext;
 
 namespace Indago.Query.Provider;
 
-public class SignalProvider(IndagoImplementation impl, uint? handle, uint clientId) : IQueryProvider
+public class ScopeProvider(IndagoImplementation impl, uint? handle, uint clientId, ScopeQueryType type) : IQueryProvider
 {
-
     public IQueryable CreateQuery(Expression expression)
-        => new SignalContext(this, expression);
+        => new ScopeContext(this, expression);
 
     public IQueryable<TElement> CreateQuery<TElement>(Expression expression)
-        => (IQueryable<TElement>)new SignalContext(this, expression);
+        => (IQueryable<TElement>)new ScopeContext(this, expression);
 
     public object? Execute(Expression expression)
-        => Execute<Signal>(expression);
+        => Execute<Scope>(expression);
     
-    public bool WithTransitions { get; set; }
     public bool WithDeclaration { get; set; }
-
+    
     public TResult Execute<TResult>(Expression expression)
     {
         // Create the query option
@@ -30,7 +28,6 @@ public class SignalProvider(IndagoImplementation impl, uint? handle, uint client
         {
             ResponseOpts = new()
             {
-                WithTransitions = WithTransitions,
                 WithDeclaration = WithDeclaration
             }
         };
@@ -51,18 +48,22 @@ public class SignalProvider(IndagoImplementation impl, uint? handle, uint client
 
         if (IndagoLog.IndagoScriptingClientDebug)
         {
-            IndagoLog.Log(query, Console.WriteLine, "get_signals", "query [in]");
+            IndagoLog.Log(query, Console.WriteLine, "get_scopes", "query [in]");
         }
 
         // Send the query
-        var response = impl.GetInternals(query).Result;
+        var response = type switch
+        {
+            ScopeQueryType.NormalChildren => impl.GetScopes(query).Result,
+            _ => impl.GetParent(query).Result,
+        };
 
         if (IndagoLog.IndagoScriptingClientDebug)
         {
-            IndagoLog.Log(response, Console.WriteLine, "get_signals", "response [out]");
+            IndagoLog.Log(response, Console.WriteLine, "get_scopes", "response [out]");
         }
 
-        var signalList = response.Select(signal => new Signal(impl, signal));
-        return (TResult)signalList;
+        var scopeList = response.Value.Select(scope => new Scope(impl, scope));
+        return (TResult)scopeList;
     }
 }

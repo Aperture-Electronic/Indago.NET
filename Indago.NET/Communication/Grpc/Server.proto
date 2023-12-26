@@ -9,7 +9,7 @@ service BL {
   rpc get_handle_by_name (BusinessLogicString) returns (BusinessLogicHandle);
   rpc get_object_by_name (BusinessLogicString) returns (BusinessLogicObject);
   rpc get_internals (BusinessLogicQuery) returns (stream BusinessLogicInternalList);
-  rpc get_scopes (BusinessLogicQuery) returns (BusinessLogicScopeList);
+  rpc get_scopes (BusinessLogicQuery) returns (stream BusinessLogicScopeList);
   rpc get_full_paths (BusinessLogicQuery) returns (BusinessLogicStringList);
   rpc get_parent (BusinessLogicQuery) returns (BusinessLogicOptionalScope);
   rpc get_ports (BusinessLogicQuery) returns (BusinessLogicPortList);
@@ -41,7 +41,7 @@ service BL {
   rpc get_current_time (NoParameters) returns (BusinessLogicTimePoint);
   rpc set_current_time (BusinessLogicTimePoint) returns (NoParameters);
   rpc get_value_at_time (BusinessLogicQuery) returns (BusinessLogicString);
-  rpc get_values (BusinessLogicQuery) returns (BusinessLogicTimeValueList);
+  rpc get_values (BusinessLogicQuery) returns (stream BusinessLogicTimeValueList);
   rpc get_num_transitions (BusinessLogicQuery) returns (BusinessLogicInteger);
   rpc close (BusinessLogicInteger) returns (NoParameters);
   rpc get_session_info (BusinessLogicQuery) returns (SessionInfo);
