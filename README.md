@@ -9,7 +9,7 @@ The Indago.NET is rewritten by official Python scripting library provided by Cad
 ## Development Enviroment
 Indago.NET is developing under latest .NET 8 and C# 12.0, we are happy to use the latest technologies to develop the software.
 
-All library files are written by C#, and with some third-party library (Google.Protobuf, gRPC.NET, etc.), only the Microsoft .NET standard libraries. The base language of the project is .NET 8.
+All library files are written by C#, and with some third-party library (Google.Protobuf, gRPC.NET, etc.), and the Microsoft .NET standard libraries. The base framework of the project is .NET 8.
 
 ## Reference Library
 The development source is from the official of Cadence Indago (current version is 22.09).
