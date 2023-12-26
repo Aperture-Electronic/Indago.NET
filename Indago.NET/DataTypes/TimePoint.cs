@@ -1,10 +1,11 @@
+using System.Numerics;
 using System.Text.RegularExpressions;
 using Com.Cadence.Indago.Scripting.Generated;
 using Indago.ExceptionFlow;
 
 namespace Indago.DataTypes;
 
-public partial class TimePoint : IEquatable<TimePoint>, IEqualityComparer<TimePoint>
+public partial class TimePoint : IEquatable<TimePoint>, IEqualityComparer<TimePoint>, IComparisonOperators<TimePoint, TimePoint, bool>
 {
     [GeneratedRegex(@"^\\s*([0-9.ed+-]+)\\s*[(]?([0-9.ed+-]*)[)]?\\s*([^\\s]*).*$")]
     private static partial Regex StringTimePatternRegex();
@@ -83,6 +84,20 @@ public partial class TimePoint : IEquatable<TimePoint>, IEqualityComparer<TimePo
         SequenceNumber = sequenceNumber;
     }
 
+    /// <summary>
+    /// Create a new timepoint with specified time and units
+    /// and without any sequence number information
+    /// </summary>
+    /// <param name="time">Time value</param>
+    /// <param name="units">Units</param>
+    public TimePoint(ulong time, TimeUnit units)
+    {
+        Time = time;
+        Units = units;
+        ActualExponent = (int)units;
+        SequenceNumber = 0;
+    }
+
     public TimePoint(string timeString, TimeUnit? units = null)
     {
         (ulong time, TimeUnit parsedUnits, int actualExp, ulong? seqNumber) parsed =
@@ -107,7 +122,28 @@ public partial class TimePoint : IEquatable<TimePoint>, IEqualityComparer<TimePo
     public bool Equals(TimePoint? other)
     {
         if (other is null) return false;
-        throw new NotImplementedException();
+        
+        // Check who has the smaller units
+        var (smaller, larger) = Units < other.Units ? (this, other) : (other, this);
+        
+        // Convert the larger unit to smaller unit (no loss of precision)
+        var convertedLarger = larger.ConvertUnitTo(smaller.Units);
+        
+        // Compare the time value
+        return smaller.Time == convertedLarger.Time;
+    }
+
+    private void GreaterOrEqual(TimePoint other, out bool equal, out bool greater)
+    {
+        // Check who has the smaller units
+        var (smaller, larger) = Units < other.Units ? (this, other) : (other, this);
+        
+        // Convert the larger unit to smaller unit (no loss of precision)
+        var convertedLarger = larger.ConvertUnitTo(smaller.Units);
+        
+        // Compare the time value
+        equal = smaller.Time == convertedLarger.Time;
+        greater = smaller.Time > convertedLarger.Time;
     }
 
     public override string ToString()
@@ -121,11 +157,66 @@ public partial class TimePoint : IEquatable<TimePoint>, IEqualityComparer<TimePo
     /// </summary>
     public TimePoint ConvertUnitTo(TimeUnit units)
     {
-        throw new NotImplementedException();
-
+        var unitsDifference = 0;
+        ulong newTime = Time;
+        
+        if (units == Units)
+        {
+            return new (newTime, Units, SequenceNumber);
+        }
+        else if (units < Units)
+        {
+            // Will not change the time value
+            unitsDifference = (int)Units - (int)units;
+            newTime = Time * (ulong)Math.Pow(10, unitsDifference);
+            return new (newTime, units, SequenceNumber);
+        }
+        
+        // Will loss precision
+        unitsDifference = (int)units - (int)Units;
+        newTime = Time / (ulong)Math.Pow(10, unitsDifference);
+        return new(newTime, units, SequenceNumber);
     }
     
     public bool Equals(TimePoint? x, TimePoint? y) => x?.Equals(y) ?? false;
 
-    public int GetHashCode(TimePoint obj) => throw new NotImplementedException();
+    public int GetHashCode(TimePoint obj)
+        => HashCode.Combine(Time, ActualExponent, SequenceNumber);
+
+    public static bool operator ==(TimePoint? left, TimePoint? right)
+        => left?.Equals(right) ?? false;
+
+    public static bool operator !=(TimePoint? left, TimePoint? right)
+        => !(left == right);
+
+    public static bool operator >(TimePoint left, TimePoint right)
+    {
+        left.GreaterOrEqual(right, out bool equal, out bool greater);
+        return !equal && greater;
+    }
+
+    public static bool operator >=(TimePoint left, TimePoint right)
+    {
+        left.GreaterOrEqual(right, out bool equal, out bool greater);
+        return equal || greater;
+    }
+
+    public static bool operator <(TimePoint left, TimePoint right)
+        => right > left;
+
+    public static bool operator <=(TimePoint left, TimePoint right)
+        => right >= left;
+
+    public override bool Equals(object? obj) => Equals(obj as TimePoint);
+
+    public override int GetHashCode() => GetHashCode(this);
+
+    public static implicit operator TimePoint((ulong time, TimeUnit units) tp)
+        => new(tp.time, tp.units);
+
+    public static implicit operator TimePoint(string tp) => new(tp);
+
+    public static implicit operator TimePoint((ulong time, string unitString) tp)
+        => new(tp.time, tp.unitString.ParseTimeUnit());
+
 }
