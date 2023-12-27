@@ -8,7 +8,7 @@
     <Title>Indago.NET</Title>
     <Authors>Onodera Tsusaki</Authors>
     <Description>.NET Scripting Engine for Cadence(R) Indago(R) Interactive Verification Enviroment</Description>
-    <RepositoryUrl>https://git.apertureelectronic.tech:8999/onodera/indago.net</RepositoryUrl>
+    <RepositoryUrl>https://github.com/Aperture-Electronic/Indago.NET</RepositoryUrl>
     <AssemblyVersion>0.1.0</AssemblyVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
