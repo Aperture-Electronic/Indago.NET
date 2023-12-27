@@ -36,6 +36,11 @@ We are still working on these functions:
 ## Plan of Development
 We are now processing the base library to implement all functions in official Indago Python API.
 
-## Tools using this library
+## Tools Using This Library
 There some parctical tools using this library:
 * [IndagoPatchViewer](https://github.com/Aperture-Electronic/IndagoPatchViewer): A tool can realtime display the value as a image patch of selected signal 
+
+## NuGet Package
+You can install the package to your project from NuGet by   
+```dotnet add package Indago.NET --version 0.1.0```   
+or, access the [NuGet repository](https://www.nuget.org/packages/Indago.NET)
