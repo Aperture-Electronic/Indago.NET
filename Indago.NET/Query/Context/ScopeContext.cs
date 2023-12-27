@@ -10,7 +10,7 @@ public class ScopeContext : IQueryable<Scope>
 {
     private readonly ScopeProvider scopeProvider;
     public IQueryProvider Provider => scopeProvider;
-    public Type ElementType => typeof(Signal);
+    public Type ElementType => typeof(Scope);
     public Expression Expression { get; }
     
     private bool withDeclaration = false;

@@ -47,7 +47,7 @@ public class IndagoImplementation : IDisposable
         BusinessLogicClient = new (Connection.Channel);
 
         // Start the session and get the client id
-        ClientId = StartSessionAsync().Result;
+        ClientId = StartSession().Result;
         
         // Get the server info
         var serverInfo = GetServerInfo().Result;
@@ -66,7 +66,7 @@ public class IndagoImplementation : IDisposable
         EventThread.Start();
     }
 
-    private async Task<uint> StartSessionAsync()
+    private async Task<uint> StartSession()
     {
         ClientInfo clientInfo = new(Arguments);
         if (IndagoLog.IndagoScriptingClientDebug)

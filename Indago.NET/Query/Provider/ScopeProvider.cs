@@ -33,7 +33,7 @@ public class ScopeProvider(IndagoImplementation impl, uint? handle, uint clientI
         };
 
         // Get the criteria list from the expression
-        var queryContext = new SignalQueryContext(options.Criteria);
+        var queryContext = new ScopeQueryContext(options.Criteria);
         queryContext.ElaborateExpression(expression);
 
         // Create the query
