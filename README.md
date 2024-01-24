@@ -42,5 +42,5 @@ There some parctical tools using this library:
 
 ## NuGet Package
 You can install the package to your project from NuGet by   
-```dotnet add package Indago.NET --version 0.1.0```   
+```dotnet add package Indago.NET --version 0.1.1```   
 or, access the [NuGet repository](https://www.nuget.org/packages/Indago.NET)

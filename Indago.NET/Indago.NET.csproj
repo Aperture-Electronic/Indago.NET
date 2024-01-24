@@ -4,7 +4,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>Indago</RootNamespace>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <Title>Indago.NET</Title>
     <Authors>Onodera Tsusaki</Authors>
     <Description>.NET Scripting Engine for Cadence(R) Indago(R) Interactive Verification Enviroment</Description>

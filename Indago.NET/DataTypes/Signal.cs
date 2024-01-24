@@ -80,6 +80,24 @@ public class Signal(IndagoImplementation impl, BusinessLogicInternal blInternal)
     public Declaration? Declaration { get; } =
         blInternal.HasNoDeclaration ? null : new Declaration(blInternal.FetchedDeclaration);
 
+    private SignalContext SignalContext => new SignalContext(impl, handle);
+
+    /// <summary>
+    /// Get the queryable signal list under this <see cref="Signal"/>.
+    /// </summary>
+    /// <param name="withTransitions">The fetched signals has transitions record</param>
+    /// <param name="withDeclaration">The fetched signals has declaration record</param>
+    /// <returns>Queryable signal list that support LINQ query on it</returns>
+    /// <seealso cref="Signal"/>
+    /// <seealso cref="Declaration"/>
+    public IQueryable<Signal> SubSignals(bool withTransitions = false, bool withDeclaration = false)
+    {
+        SignalContext.WithTransitions = withTransitions;
+        SignalContext.WithDeclaration = withDeclaration;
+        
+        return SignalContext;
+    }
+    
     private ValueContext ValueContext { get; } = new(impl, blInternal.Handle);
     
     /// <summary>
